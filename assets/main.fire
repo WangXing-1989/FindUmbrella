@@ -6167,6 +6167,36 @@
     "san": {
       "__uuid__": "0204c9f5-5912-4df2-8399-cbf210e0d755"
     },
+    "audioBg": {
+      "__uuid__": "ba83b1eb-2e41-41b9-99f6-b27eabc84d77"
+    },
+    "audioCover": {
+      "__uuid__": "b0c6b799-e86d-4661-bd09-385f8990b3ab"
+    },
+    "audioRight": {
+      "__uuid__": "e974a938-9dd9-4004-b537-712bf899abd5"
+    },
+    "audioWrong": {
+      "__uuid__": "75ecfbf7-2e63-4717-a778-b1ba4c1219c1"
+    },
+    "audio1_1": {
+      "__uuid__": "ea4e772f-472e-46a8-a90f-d8b0bf72a08c"
+    },
+    "audio1_2": {
+      "__uuid__": "6d0510d9-26ed-46dd-bbcc-78078ff66587"
+    },
+    "audio2_1": {
+      "__uuid__": "fc43d0c0-95ad-4d04-aa07-dcece8c04cb9"
+    },
+    "audio2_2": {
+      "__uuid__": "2c135683-5d1b-45c1-bbfe-eb3529327fab"
+    },
+    "audioSuccess": {
+      "__uuid__": "5af17360-f007-495e-856d-e4dc4d08652f"
+    },
+    "audioFail": {
+      "__uuid__": "4bd9c934-28b1-483f-88f0-440ed8a911b6"
+    },
     "_id": "880F6bVY9NzZInSvKuMzjU"
   }
 ]

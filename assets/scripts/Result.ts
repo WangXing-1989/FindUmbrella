@@ -35,12 +35,16 @@ export default class Result extends cc.Component {
     }
 
     public showLost_1() {
+        cc.audioEngine.stopAllEffects();
+        cc.audioEngine.playEffect(this.main.audioWrong, false);
         this.node.active = true;
         this.hideAllDialog();
         this.playShow(this.lost_1);
     }
 
     public showLost_2() {
+        cc.audioEngine.stopAllEffects();
+        cc.audioEngine.playEffect(this.main.audioWrong, false);
         this.node.active = true;
         this.hideAllDialog();
         this.playShow(this.lost_2);
@@ -48,6 +52,8 @@ export default class Result extends cc.Component {
     }
 
     public showLost_3() {
+        cc.audioEngine.stopAllEffects();
+        cc.audioEngine.playEffect(this.main.audioFail, false);
         this.node.active = true;
         this.hideAllDialog();
         this.playShow(this.lost_3);
@@ -55,12 +61,16 @@ export default class Result extends cc.Component {
     }
 
     public showWin_1() {
+        cc.audioEngine.stopAllEffects();
+        cc.audioEngine.playEffect(this.main.audioRight, false);
         this.node.active = true;
         this.hideAllDialog();
         this.playShow(this.win_1);
     }
 
     public showWin_2(integral: number) {
+        cc.audioEngine.stopAllEffects();
+        cc.audioEngine.playEffect(this.main.audioRight, false);
         this.node.active = true;
 
         let label = cc.find("panel/label2", this.win_2).getComponent(cc.Label);
@@ -72,6 +82,8 @@ export default class Result extends cc.Component {
     }
 
     public showWin_3() {
+        cc.audioEngine.stopAllEffects();
+        cc.audioEngine.playEffect(this.main.audioSuccess, false);
         this.node.active = true;
         this.hideAllDialog();
         this.playShow(this.win_3);
@@ -79,6 +91,8 @@ export default class Result extends cc.Component {
     }
 
     public showWin_4(integral: number) {
+        cc.audioEngine.stopAllEffects();
+        cc.audioEngine.playEffect(this.main.audioSuccess, false);
         this.node.active = true;
 
         let label = cc.find("panel/layout/label1", this.win_4).getComponent(cc.Label);

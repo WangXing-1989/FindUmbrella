@@ -40,6 +40,36 @@ export default class Main extends cc.Component {
     @property(cc.Prefab)
     san: cc.Prefab = null;
 
+    @property(cc.AudioClip)
+    audioBg: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    audioCover: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    audioRight: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    audioWrong: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    audio1_1: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    audio1_2: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    audio2_1: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    audio2_2: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    audioSuccess: cc.AudioClip = null;
+
+    @property(cc.AudioClip)
+    audioFail: cc.AudioClip = null;
+
     private index: number = 0;
     private data: any;
     private answer: number = -1; // 本次游戏答案
@@ -73,6 +103,8 @@ export default class Main extends cc.Component {
         this.listPanel.active = false;
         this.cover.active = true;
         this.cover.opacity = 255;
+
+        cc.audioEngine.playMusic(this.audioBg, true);
 
         this.index = 0;
         this.uploadData.LevelDifficultyEnd = this.index;
@@ -196,6 +228,10 @@ export default class Main extends cc.Component {
     }
 
     private setTarget(type: 1 | 2) {
+        let audio = this.index == 0 ? this.audio1_1 : this.audio2_1;
+        cc.audioEngine.stopAllEffects();
+        cc.audioEngine.playEffect(audio, false);
+
         this.rule.string = this.data.rule1;
         let random: number = Math.ceil(Math.random() * 16);
         if (random < 1) random = 1;
@@ -214,6 +250,11 @@ export default class Main extends cc.Component {
     }
 
     private setListPanel(type: 1 | 2) {
+        let audio = this.index == 0 ? this.audio1_2 : this.audio2_2;
+        cc.audioEngine.stopAllEffects();
+        cc.audioEngine.playEffect(audio, false);
+
+        this.curTime = this.data.time;
         this.time.node.parent.active = this.data.isTime;
         this.time.string = `${this.curTime}秒`;
 
