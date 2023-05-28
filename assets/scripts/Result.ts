@@ -1,0 +1,111 @@
+import Main from "./Main";
+
+const {ccclass, property} = cc._decorator;
+
+@ccclass
+export default class Result extends cc.Component {
+
+    @property(cc.Node)
+    lost_1: cc.Node = null;
+
+    @property(cc.Node)
+    lost_2: cc.Node = null;
+
+    @property(cc.Node)
+    lost_3: cc.Node = null;
+
+    @property(cc.Node)
+    win_1: cc.Node = null;
+
+    @property(cc.Node)
+    win_2: cc.Node = null;
+
+    @property(cc.Node)
+    win_3: cc.Node = null;
+    
+    @property(cc.Node)
+    win_4: cc.Node = null;
+
+    private main: Main;
+
+    start() {
+        this.main = cc.find("Canvas").getComponent(Main);
+        this.node.active = false;
+        this.hideAllDialog();
+    }
+
+    public showLost_1() {
+        this.node.active = true;
+        this.hideAllDialog();
+        this.playShow(this.lost_1);
+    }
+
+    public showLost_2() {
+        this.node.active = true;
+        this.hideAllDialog();
+        this.playShow(this.lost_2);
+        this.main.playHand();
+    }
+
+    public showLost_3() {
+        this.node.active = true;
+        this.hideAllDialog();
+        this.playShow(this.lost_3);
+        this.main.playHand();
+    }
+
+    public showWin_1() {
+        this.node.active = true;
+        this.hideAllDialog();
+        this.playShow(this.win_1);
+    }
+
+    public showWin_2(integral: number) {
+        this.node.active = true;
+
+        let label = cc.find("panel/label2", this.win_2).getComponent(cc.Label);
+        label.string = "+" + integral;
+
+        this.hideAllDialog();
+        this.playShow(this.win_2);
+        this.main.playHand();
+    }
+
+    public showWin_3() {
+        this.node.active = true;
+        this.hideAllDialog();
+        this.playShow(this.win_3);
+        this.main.playHand();
+    }
+
+    public showWin_4(integral: number) {
+        this.node.active = true;
+
+        let label = cc.find("panel/layout/label1", this.win_4).getComponent(cc.Label);
+        label.string = "" + integral;
+
+        this.hideAllDialog();
+        this.playShow(this.win_4);
+    }
+
+    private playShow(dialog: cc.Node) {
+        dialog.active = true;
+        dialog.scale = 0;
+        cc.tween(dialog).to(0.5, {scale: 1}, { easing: 'elasticOut'}).start();
+    }
+
+    private playHide(dialog: cc.Node) {
+        dialog.scale = 1;
+        cc.tween(dialog).to(0.5, {scale: 0}, { easing: 'elasticIn'}).call(() => dialog.active = false).start();
+    }
+
+    public hideAllDialog() {
+        this.lost_1.active = false;
+        this.lost_2.active = false;
+        this.lost_3.active = false;
+        this.win_1.active = false;
+        this.win_2.active = false;
+        this.win_3.active = false;
+        this.win_4.active = false;
+    }
+}
