@@ -75,8 +75,22 @@ export default class Main extends cc.Component {
     private answer: number = -1; // 本次游戏答案
     private curResult: boolean[]; // 当前题目作答结果
     private allResult: boolean[][]; // 所有题目作答结果
-    private curIntegral: number = 0; // 当前题分数
-    private allIntegral: number = 0; // 总得分
+    private _curIntegral: number = 0; // 当前题分数
+    private get curIntegral(): number {
+        return this._curIntegral;
+    }
+    private set curIntegral(value: number) {
+        this._curIntegral = value;
+        this.integral.string = `${this.allIntegral + this.curIntegral}分`;
+    }
+    private _allIntegral: number = 0; // 总得分
+    private get allIntegral(): number {
+        return this._allIntegral;
+    }
+    private set allIntegral(value: number) {
+        this._allIntegral = value;
+        this.integral.string = `${this.allIntegral + this.curIntegral}分`;
+    }
     private curCount: number = 0; // 当前作答次数
     private curTime: number = 0; // 当前剩余倒计时
     private allRightTime: number = 0; // 当前难度所有答对次数总用时
@@ -93,6 +107,7 @@ export default class Main extends cc.Component {
         fourthTaskReaction: 0, // 任务4用户正确反应时
         LevelDifficultyEnd: 0, // 结束时所处难度水平
     };
+    private preTargetIndex: number = -1; // 上一次的目标伞，本次不能跟上一次出现一样的伞
 
     start() {
         this.init();
@@ -180,16 +195,14 @@ export default class Main extends cc.Component {
 
         this.level.string = this.data.title + "";
         this.integral.node.parent.active = this.data.isIntegral;
-        this.integral.string = `${this.data.integral}分`;
-        // this.time.node.parent.active = this.data.isTime;
-        // this.time.string = `${this.curTime}秒`;
+        // this.integral.string = `${this.allIntegral}分`;
 
         this.target.node.active = true;
         this.target.node.opacity = 255;
         this.listPanel.active = false;
         this.setTarget(this.data.type);
 
-        this.scheduleOnce(this.switch, 5.5);
+        this.scheduleOnce(this.switch, 3.5);
     }
 
     private switch() {
@@ -233,20 +246,34 @@ export default class Main extends cc.Component {
         cc.audioEngine.playEffect(audio, false);
 
         this.rule.string = this.data.rule1;
-        let random: number = Math.ceil(Math.random() * 16);
-        if (random < 1) random = 1;
-        this.target.node.name = random + "";
-        let imgName: string = type == 1 ? `single_${random}` : `many_${random}`;
+        this.preTargetIndex = this.getRandom(1, 15, this.preTargetIndex);
+        this.target.node.name = this.preTargetIndex + "";
+        let imgName: string = type == 1 ? `single_${this.preTargetIndex}` : `many_${this.preTargetIndex}`;
         let path: string = `umbrella/${imgName}`;
         console.log("path : " + path);
         cc.resources.load(path, cc.Texture2D, (err, texture) => {
             this.target.spriteFrame = new cc.SpriteFrame(texture as cc.Texture2D);
         });
 
-        this.curTime = 5;
+        this.curTime = 3;
         this.time.node.parent.active = true;
         this.time.string = `${this.curTime}秒`;
         this.checkTime();
+    }
+
+    /**
+     * 获取范围内的随机数
+     * @param min 最小值
+     * @param max 最大值
+     * @param haveNum 需要排除的数
+     */
+    private getRandom(min: number, max: number, haveNum: number): number {
+        let random = min + Math.round(Math.random() * (max - min));
+        if (random == haveNum) {
+            return this.getRandom(min, max, haveNum);
+        } else {
+            return random;
+        }
     }
 
     private setListPanel(type: 1 | 2) {
@@ -344,29 +371,6 @@ export default class Main extends cc.Component {
             if (this.index == 0) { // 练习模式
                 this.result.showLost_1();
             } else { // 难度模式
-                // if (this.curCount < this.data.count) { // 还有次数
-                //     this.result.showLost_2();
-                // } else { // 最后一次
-                //     let curRightCount = this.curResult.filter(item => item).length;
-                //     if (curRightCount >= this.data.need) { // 虽然最后一次答错了，但是之前答对的次数已经达到过关要求，所以要弹正反馈弹窗
-                //         this.allIntegral += this.curIntegral;
-                //         this.uploadData.totalScore = this.allIntegral;
-                //         if (this.index < 4) {
-                //             this.result.showWin_3();
-                //             this.setReaction();
-                //             this.setSuccessCount();
-                //             this.upload();
-                //         } else {
-                //             this.result.showWin_4(this.allIntegral);
-                //             this.setReaction();
-                //             this.setSuccessCount();
-                //             this.upload();
-                //         }
-                //     } else {
-                //         this.result.showLost_3();
-                //     }
-                // }
-
                 this.result.showLost_2();
             }
         }
@@ -387,6 +391,7 @@ export default class Main extends cc.Component {
                 let curRightCount = this.curResult.filter(item => item).length;
                 if (curRightCount >= this.data.need) { // 虽然最后一次答错了，但是之前答对的次数已经达到过关要求，所以要弹正反馈弹窗
                     this.allIntegral += this.curIntegral;
+                    this.curIntegral = 0;
                     this.uploadData.totalScore = this.allIntegral;
                     if (this.index < 4) {
                         this.result.showWin_3();
@@ -421,6 +426,7 @@ export default class Main extends cc.Component {
                 if (this.index < 4) {
                     if (rightCount >= this.data.need) {
                         this.allIntegral += this.curIntegral;
+                        this.curIntegral = 0;
                         this.uploadData.totalScore = this.allIntegral;
                         this.result.showWin_3();
                         this.setReaction();
@@ -432,6 +438,7 @@ export default class Main extends cc.Component {
                 } else {
                     if (rightCount >= this.data.need) {
                         this.allIntegral += this.curIntegral;
+                        this.curIntegral = 0;
                         this.uploadData.totalScore = this.allIntegral;
                         this.result.showWin_4(this.allIntegral);
                         this.setReaction();
@@ -463,6 +470,7 @@ export default class Main extends cc.Component {
         this.uploadData.LevelDifficultyEnd = this.index;
         this.allResult.push(this.curResult);
         this.allIntegral += this.curIntegral;
+        this.curIntegral = 0;
         this.uploadData.totalScore = this.allIntegral;
         this.curCount = 0;
         this.allRightTime = 0;
