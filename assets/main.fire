@@ -5481,7 +5481,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 540,
-      "height": 364
+      "height": 294
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -5542,8 +5542,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 308,
-      "height": 149.16
+      "width": 220,
+      "height": 83.16
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -5594,8 +5594,8 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "恭喜您全部通关\n您的得分是",
-    "_N$string": "恭喜您全部通关\n您的得分是",
+    "_string": "您的得分是",
+    "_N$string": "您的得分是",
     "_fontSize": 44,
     "_lineHeight": 66,
     "_enableWrapText": true,
@@ -5603,7 +5603,7 @@
     "_isSystemFontUsed": true,
     "_spacingX": 0,
     "_batchAsBitmap": false,
-    "_styleFlags": 0,
+    "_styleFlags": 1,
     "_underlineHeight": 0,
     "_N$horizontalAlign": 1,
     "_N$verticalAlign": 1,
@@ -5644,8 +5644,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 193.43,
-      "height": 200
+      "width": 164.13,
+      "height": 100
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -5657,7 +5657,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        0,
+        -44.958,
         0,
         0,
         0,
@@ -5718,8 +5718,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -36.650000000000006,
-        -69.921,
+        -22,
+        0,
         0,
         0,
         0,
@@ -5801,7 +5801,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 73.3,
+      "width": 44,
       "height": 75.6
     },
     "_anchorPoint": {
@@ -5813,8 +5813,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        60.06499999999999,
-        -74.432,
+        60.065,
+        -5,
         0,
         0,
         0,
@@ -5853,8 +5853,8 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "分ff",
-    "_N$string": "分ff",
+    "_string": "分",
+    "_N$string": "分",
     "_fontSize": 44,
     "_lineHeight": 60,
     "_enableWrapText": true,
@@ -5881,8 +5881,8 @@
     "_enabled": true,
     "_layoutSize": {
       "__type__": "cc.Size",
-      "width": 193.43,
-      "height": 200
+      "width": 164.13,
+      "height": 100
     },
     "_resize": 1,
     "_N$layoutType": 1,
@@ -5961,7 +5961,7 @@
     "_contentSize": {
       "__type__": "cc.Size",
       "width": 507,
-      "height": 148
+      "height": 154
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -5973,7 +5973,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        205.251,
+        172.251,
         0,
         0,
         0,
@@ -6013,7 +6013,7 @@
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
     "_spriteFrame": {
-      "__uuid__": "d52ce0ba-cd0f-4f10-a1e3-42611ea0c1b0"
+      "__uuid__": "3a4262bd-c4cc-42f4-9b20-0dae308cf420"
     },
     "_type": 0,
     "_sizeMode": 1,
@@ -6070,7 +6070,7 @@
       "ctor": "Float64Array",
       "array": [
         0,
-        -277.427,
+        -248.42700000000002,
         0,
         0,
         0,
@@ -6830,7 +6830,7 @@
       "__id__": 2
     },
     "_children": [],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 144
