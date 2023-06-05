@@ -25,6 +25,9 @@ export default class Result extends cc.Component {
     
     @property(cc.Node)
     win_4: cc.Node = null;
+    
+    @property(cc.Node)
+    timeOut: cc.Node = null;
 
     private main: Main;
 
@@ -40,6 +43,7 @@ export default class Result extends cc.Component {
         this.node.active = true;
         this.hideAllDialog();
         this.playShow(this.lost_1);
+        this.main.stopHand();
     }
 
     public showLost_2() {
@@ -100,6 +104,20 @@ export default class Result extends cc.Component {
 
         this.hideAllDialog();
         this.playShow(this.win_4);
+        this.main.stopHand();
+    }
+
+    public showTimeOut(integral: number) {
+        cc.audioEngine.stopAllEffects();
+        cc.audioEngine.playEffect(this.main.audioFail, false);
+        this.node.active = true;
+
+        let label = cc.find("panel/layout/label1", this.timeOut).getComponent(cc.Label);
+        label.string = "" + integral;
+
+        this.hideAllDialog();
+        this.playShow(this.timeOut);
+        this.main.stopHand();
     }
 
     private playShow(dialog: cc.Node) {
@@ -121,5 +139,6 @@ export default class Result extends cc.Component {
         this.win_2.active = false;
         this.win_3.active = false;
         this.win_4.active = false;
+        this.timeOut.active = false;
     }
 }

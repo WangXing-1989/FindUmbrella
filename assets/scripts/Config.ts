@@ -6,7 +6,7 @@ export const Config = {
         need: 1, // 需要答对几次才能过关
         type: 1, // 1:单色伞， 2:双色伞
         isTime: false, // 是否需要倒计时
-        time: 0, // 倒计时秒数
+        time: 10, // 倒计时秒数
         isIntegral: false, // 是否有积分
         integral: 0, // 积分
         title: "练习模式",

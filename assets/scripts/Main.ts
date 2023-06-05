@@ -108,6 +108,7 @@ export default class Main extends cc.Component {
         LevelDifficultyEnd: 0, // 结束时所处难度水平
     };
     private preTargetIndex: number = -1; // 上一次的目标伞，本次不能跟上一次出现一样的伞
+    private answerTime: number = 0;
 
     start() {
         this.init();
@@ -118,6 +119,9 @@ export default class Main extends cc.Component {
         this.listPanel.active = false;
         this.cover.active = true;
         this.cover.opacity = 255;
+        this.time.node.parent.active = false;
+        this.curTime = 150;
+        this.stopHand();
 
         cc.audioEngine.playMusic(this.audioBg, true);
 
@@ -158,7 +162,7 @@ export default class Main extends cc.Component {
             .start();
     }
 
-    private stopHand() {
+    public stopHand() {
         this.handTween && this.handTween.stop();
         this.hand.active = false;
     }
@@ -191,7 +195,7 @@ export default class Main extends cc.Component {
         this.curCount++;
         this.answer = -1;
         this.data = Config[`level_${this.index}`];
-        this.curTime = this.data.time;
+        // this.curTime = this.data.time;
 
         this.level.string = this.data.title + "";
         this.integral.node.parent.active = this.data.isIntegral;
@@ -214,8 +218,6 @@ export default class Main extends cc.Component {
                 this.listPanel.opacity = 0;
                 this.setListPanel(this.data.type);
 
-                this.checkTime();
-
                 cc.tween(this.listPanel)
                     .to(0.5, { opacity: 255 })
                     .start();
@@ -233,10 +235,11 @@ export default class Main extends cc.Component {
         this.curTime--;
         this.time.string = this.curTime + "秒";
         if (this.curTime <= 0) {
-            this.unschedule(this.updateTime);
-            if (this.listPanel.active) {
-                this.checkResult();
-            }
+            this.unscheduleAllCallbacks();
+            this.result.showTimeOut(this.allIntegral);
+            this.setReaction();
+            this.setSuccessCount();
+            this.upload();
         }
     }
 
@@ -254,11 +257,6 @@ export default class Main extends cc.Component {
         cc.resources.load(path, cc.Texture2D, (err, texture) => {
             this.target.spriteFrame = new cc.SpriteFrame(texture as cc.Texture2D);
         });
-
-        this.curTime = 3;
-        this.time.node.parent.active = true;
-        this.time.string = `${this.curTime}秒`;
-        this.checkTime();
     }
 
     /**
@@ -281,9 +279,11 @@ export default class Main extends cc.Component {
         cc.audioEngine.stopAllEffects();
         cc.audioEngine.playEffect(audio, false);
 
-        this.curTime = this.data.time;
-        this.time.node.parent.active = this.data.isTime;
-        this.time.string = `${this.curTime}秒`;
+        this.answerTime = new Date().getTime();
+
+        // this.curTime = this.data.time;
+        // this.time.node.parent.active = this.data.isTime;
+        // this.time.string = `${this.curTime}秒`;
 
         this.rule.string = this.data.rule2;
         let layout = this.listPanel.getChildByName("layout").getComponent(cc.Layout);
@@ -329,6 +329,8 @@ export default class Main extends cc.Component {
                 this.playHand(cc.v2(54, -175));
             }
         }
+
+        this.scheduleOnce(this.checkResult, this.data.time);
     }
 
     private getRandomList(count: number): number[] {
@@ -347,17 +349,21 @@ export default class Main extends cc.Component {
 
     private clickSan(e: cc.Button) {
         this.stopHand();
-        this.unschedule(this.updateTime);
+        // this.unschedule(this.updateTime);
         this.answer = parseInt(e.node.name);
         this.checkResult();
     }
 
     private checkResult() {
+        this.unschedule(this.checkResult);
+
         let correctIndex: number = parseInt(this.target.node.name);
         let str: string = "";
         if (this.answer == correctIndex) { // 答对了
             str = "答对了";
-            this.allRightTime += (this.data.time - this.curTime);
+            let timeNum = Math.round((new Date().getTime() - this.answerTime) / 1000);
+            this.answerTime = new Date().getTime();
+            this.allRightTime += timeNum;
             this.curResult.push(true);
             this.curIntegral += this.data.integral;
             if (this.index == 0) { // 练习模式
@@ -399,6 +405,7 @@ export default class Main extends cc.Component {
                         this.setSuccessCount();
                         this.upload();
                     } else {
+                        this.unscheduleAllCallbacks();
                         this.result.showWin_4(this.allIntegral);
                         this.setReaction();
                         this.setSuccessCount();
@@ -440,6 +447,7 @@ export default class Main extends cc.Component {
                         this.allIntegral += this.curIntegral;
                         this.curIntegral = 0;
                         this.uploadData.totalScore = this.allIntegral;
+                        this.unscheduleAllCallbacks();
                         this.result.showWin_4(this.allIntegral);
                         this.setReaction();
                         this.setSuccessCount();
@@ -477,6 +485,10 @@ export default class Main extends cc.Component {
         this.curResult = [];
         this.curIntegral = 0;
         this.showView();
+
+        this.time.node.parent.active = true;
+        this.time.string = `${this.curTime}秒`;
+        this.checkTime();
     }
 
     // 点击再次练习
@@ -528,6 +540,4 @@ export default class Main extends cc.Component {
     private upload() {
         GHttp.instance.upLoadGameData(this.uploadData);
     }
-
-    // update (dt) {}
 }
